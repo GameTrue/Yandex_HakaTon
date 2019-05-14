@@ -80,7 +80,7 @@ def delete_solution(id):
     if session['username'] in ADMINS:
         return redirect('/solutions')
     else:
-        return redirect('/my_solutions')
+        return redirect('/')
 
 
 @app.route('/delete_announcement_<id>', methods=['POST', 'GET'])
@@ -151,6 +151,7 @@ def solutions():
     arr = []
     ids = []
     for i in all:
+        print(all)
         id = i.id
         sender = i.student.username
         task = i.task
@@ -204,12 +205,41 @@ def change_status(id):
     for i in all:
         sender = i.student.username
         dat.append((sender, sender))
-    form.people = SelectField('Выберите статус', choices=dat)
     if form.validate_on_submit():
+        peop = form.people.data
+        if form.str.data != '':
+            solve.code = form.str.data
+        if peop != 'None':
+            users = YandexLyceumStudent.query.filter_by(username=peop).first()
+            all = SolutionAttempt.query.all()
+            task = ''
+            code = ''
+            date = ''
+            aut_name = ''
+            for i in all:
+                print(id, int(i.id))
+                if int(id) == int(i.id):
+                    print(1)
+                    task = i.task
+                    code = i.code
+                    date = i.date
+                    aut_name = i.aut_name
+                    break
+            solution = SolutionAttempt(task=task,
+                                       code=code,
+                                       status='Выполняется',
+                                       date=date,
+                                       aut_name=aut_name
+                                       )
+            users.SolutionAttempts.append(solution)
+            db.session.commit()
+
         solve.status = form.select.data
         db.session.commit()
         return redirect('/solutions')
-    return render_template('change_status.html', session=session, ADMINS=ADMINS, form=form, code=solve.code, id=user.id,
+    code = solve.code
+    print(code)
+    return render_template('change_status.html', session=session, ADMINS=ADMINS, form=form, code=code, id=user.id,
                            username=user.username, task=solve.task)
 
 

@@ -6,7 +6,7 @@ from wtforms import validators
 
 class SolverForm(FlaskForm):
     task_name = StringField('Название задачи:', validators=[DataRequired()], widget=TextInput())
-    code = TextAreaField('Комментарии:', validators=[DataRequired()],widget=TextArea())
-    date = StringField('Дата:', validators=[DataRequired()], widget=TextInput())
+    code = TextAreaField('Комментарии:', validators=[DataRequired()], widget=TextArea())
+    date = DateField('Дата:', validators=[DataRequired()])
     aut_name = StringField('Имя автора:', validators=[DataRequired()], widget=TextInput())
     submit = SubmitField('Отправить')

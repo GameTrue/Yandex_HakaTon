@@ -13,9 +13,17 @@
 
         <h4><u>Описание:</u></h4>
             <div class="bg-dark text-white" style="border: 2px solid black;padding:20px;">
-                <code> <pre class="text-white">{{code}} </pre></code>
+                <code> <pre class="text-white">{{code}}</pre></code>
             </div>
-
+            <p>
+                {{ form.str.label }}<br>
+            <pre>{{ form.str(cols="68", rows="5", class='bg-dark text-white', style="border: 2px solid black;", placeholder='Введите текст, чтобы изменить прошлый') }}</pre><br>
+                {% for error in form.str.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </p>
             <br/>
 
             <p>
