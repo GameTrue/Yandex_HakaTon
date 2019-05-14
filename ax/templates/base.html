@@ -26,11 +26,11 @@
                         <a class="navbar-brand text-white" href="/">Главная</a>
 
                         {% if session["username"] in ADMINS %}
-                             <a class="navbar-brand text-white" href="/add_announcement">Добавить объявление</a>
-                            <a class="navbar-brand text-white" href="/solutions">Решения учеников</a>
+                             <a class="navbar-brand text-white" href="/add_announcement">Добавить задачу</a>
+                            <a class="navbar-brand text-white" href="/solutions">Задачи</a>
                          {% else %}
                               <a class="navbar-brand text-white" href="/add_task">Добавить задачу</a>
-                              <a class="navbar-brand text-white" href="/my_solutions">Мои решения</a>
+                              <a class="navbar-brand text-white" href="/my_solutions">Задачи друзей</a>
                         {% endif %}
                          <a class="navbar-brand text-white" href="/logout">выйти</a>
            {% endif %}

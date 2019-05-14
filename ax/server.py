@@ -116,11 +116,13 @@ def ad_announcement():
 def index():
     if 'username' not in session:
         return redirect('/login')
-    all = AnnouncementModel.query.all()
-    announcements = []
+    user = YandexLyceumStudent.query.filter_by(username=session['username']).first()
+    all = SolutionAttempt.query.filter_by(student_id=user.id)
+    arr = []
     for i in all:
-        announcements.append((i.id, i.author, i.title, i.announcement))
-    return render_template('index.html', ADMINS=ADMINS, session=session, events=announcements, sz=len(announcements))
+        arr.append((i.id, i.task, i.status))
+    return render_template('my_solutions.html', ADMINS=ADMINS, session=session, solutions=arr, sz=len(arr))
+
 
 
 @app.route('/logout')
@@ -152,12 +154,11 @@ def solutions():
 def my_solutions():
     if 'username' not in session:
         return redirect('/login')
-    user = YandexLyceumStudent.query.filter_by(username=session['username']).first()
-    all = SolutionAttempt.query.filter_by(student_id=user.id)
-    arr = []
+    all = AnnouncementModel.query.all()
+    announcements = []
     for i in all:
-        arr.append((i.id, i.task, i.status))
-    return render_template('my_solutions.html', ADMINS=ADMINS, session=session, solutions=arr, sz=len(arr))
+        announcements.append((i.id, i.author, i.title, i.announcement))
+    return render_template('index.html', ADMINS=ADMINS, session=session, events=announcements, sz=len(announcements))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -220,7 +221,6 @@ def add_task():
     form = SolverForm()
     if form.validate_on_submit():
         code = form.code.data
-        print(code)
         task_name = form.task_name.data
         solution = SolutionAttempt(task=task_name,
                                    code=code,

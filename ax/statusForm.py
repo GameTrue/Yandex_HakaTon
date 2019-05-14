@@ -3,5 +3,5 @@ from wtforms import SubmitField, SelectField
 
 
 class StatusForm(FlaskForm):
-    select = SelectField('Выберите статус',choices=[('На проверке', 'На проверке'), ('Отклонено', 'Отклонено'), ('Зачтено', 'Зачтено')])
+    select = SelectField('Выберите статус',choices=[('Выполняется', 'Выполняется'), ('Отложено', 'Отложено'), ('Выполнено', 'Выполнено')])
     submit = SubmitField('Сохранить')
