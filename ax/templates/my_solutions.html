@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if sz == 0%}
+    <br/>
+<br/>
+<br/>
+<br/>
+<br/>
+    <center><h1> Список ваших решений пуст </h1></center>
+
+      {% else %}
+    <div>
+        <br/>
+  <table class="bg-gray" border="1" width="100%" cellpadding="5">
+
+       <th>ID</th>
+      <th>Задача</th>
+      <th>Решение</th>
+      <th>Статус</th>
+         <th></th>
+
+      {% for id, task_name, status in solutions %}
+      <tr>
+          <th>{{id}}</th>
+          <th>{{task_name}}</th>
+          <th> <a class="text-white" href="/code/{{id}}">url</a></th>
+                 {% if status == 'На проверке'%}
+          <th> <a style="color:rgba(246, 238, 96, 1)">{{status}}</a></th>
+          {% endif %}
+            {% if status == 'Зачтено'%}
+          <th > <a style="color:rgba(51, 255, 51, 1)">{{status}}</a></th>
+          {% endif %}
+            {% if status == 'Отклонено'%}
+          <th> <a style="color:rgba(255, 41, 44, 1)">{{status}}</a></th>
+          {% endif %}
+         <th> <a class="text-white" href="/delete_solution/{{id}}">Удалить</a></th>
+      </tr>
+
+      {% endfor %}
+
+       </table>
+    </div>
+{% endif %}
+{% endblock %}

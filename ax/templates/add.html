@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Отправить решение</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+
+            {{ form.task_name.label }}
+            <br>
+
+                {{ form.task_name(size='62', class='bg-dark text-white') }} <br>
+
+            {% for error in form.task_name.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+
+        </p>
+
+        <p>
+            {{ form.code.label }}<br>
+        <pre>{{ form.code(cols="68", rows="25", class='bg-dark text-white') }}</pre><br>
+            {% for error in form.code.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit(class='bg-secondary') }}</p>
+    </form>
+
+{% endblock %}
