@@ -5,6 +5,8 @@ from loginform import LoginForm
 from registerform import RegisterForm
 from SolverForm import SolverForm
 from statusForm import StatusForm
+from flask_wtf import FlaskForm
+from wtforms import SubmitField, SelectField
 
 app = Flask(__name__)
 
@@ -16,6 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 ADMINS = json.loads(open('static/admins.txt', 'r', encoding='utf-8').read())
+
 class YandexLyceumStudent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -23,6 +26,7 @@ class YandexLyceumStudent(db.Model):
     surname = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
+    passwordtwo = db.Column(db.String(120), unique=False, nullable=False)
 
     def __repr__(self):
         return '<YandexLyceumStudent {} {} {} {}>'.format(
@@ -33,6 +37,8 @@ class SolutionAttempt(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(120), unique=False, nullable=False)
     code = db.Column(db.String(2000), unique=False, nullable=False)
+    date = db.Column(db.String(15), unique=False, nullable=False)
+    aut_name = db.Column(db.String(120), unique=False, nullable=False)
     status = db.Column(db.String(50), unique=False, nullable=False)
     student_id = db.Column(db.Integer,
                            db.ForeignKey('yandex_lyceum_student.id'),
@@ -119,9 +125,11 @@ def index():
     user = YandexLyceumStudent.query.filter_by(username=session['username']).first()
     all = SolutionAttempt.query.filter_by(student_id=user.id)
     arr = []
+    ids = []
     for i in all:
         arr.append((i.id, i.task, i.status))
-    return render_template('my_solutions.html', ADMINS=ADMINS, session=session, solutions=arr, sz=len(arr))
+        ids.append(id)
+    return render_template('my_solutions.html', ADMINS=ADMINS, session=session, solutions=arr, sz=len(arr), ids=ids)
 
 
 
@@ -141,13 +149,15 @@ def solutions():
 
     all = SolutionAttempt.query.all()
     arr = []
+    ids = []
     for i in all:
         id = i.id
         sender = i.student.username
         task = i.task
         status = i.status
         arr.append((id, sender, task, status))
-    return render_template('admin_solutions.html', session=session, ADMINS=ADMINS, solutions=arr, sz=len(arr))
+        ids.append(id)
+    return render_template('admin_solutions.html', session=session, ADMINS=ADMINS, solutions=arr, sz=len(arr), ids=ids)
 
 
 @app.route('/my_solutions', methods=['POST', 'GET'])
@@ -156,8 +166,10 @@ def my_solutions():
         return redirect('/login')
     all = AnnouncementModel.query.all()
     announcements = []
+    solutions = []
     for i in all:
         announcements.append((i.id, i.author, i.title, i.announcement))
+        solutions.append(i.id)
     return render_template('index.html', ADMINS=ADMINS, session=session, events=announcements, sz=len(announcements))
 
 
@@ -184,14 +196,15 @@ def login():
 def change_status(id):
     if 'username' not in session:
         return redirect('/')
-
-    if session['username'] not in ADMINS:
-        return redirect('/')
-
     solve = SolutionAttempt.query.filter_by(id=id).first()
     user = YandexLyceumStudent.query.filter_by(id=solve.student_id).first()
     form = StatusForm()
-
+    dat = []
+    all = SolutionAttempt.query.all()
+    for i in all:
+        sender = i.student.username
+        dat.append((sender, sender))
+    form.people = SelectField('Выберите статус', choices=dat)
     if form.validate_on_submit():
         solve.status = form.select.data
         db.session.commit()
@@ -222,15 +235,18 @@ def add_task():
     if form.validate_on_submit():
         code = form.code.data
         task_name = form.task_name.data
+        date = form.date.data
+        aut_name = form.aut_name.data
         solution = SolutionAttempt(task=task_name,
                                    code=code,
-                                   status='На проверке'
+                                   status='Выполняется',
+                                   date=date,
+                                   aut_name=aut_name
                                    )
-        print(code)
         user = YandexLyceumStudent.query.filter_by(username=session['username']).first()
         user.SolutionAttempts.append(solution)
         db.session.commit()
-        return redirect('/my_solutions')
+        return redirect('/')
     return render_template('add.html', ADMINS=ADMINS, session=session, form=form)
 
 
@@ -244,22 +260,30 @@ def register():
     if form.validate_on_submit():
         username = form.user_name.data
         password = form.password.data
+        passwordtwo = form.passwordtwo.data
         email = form.email.data
         name = form.name.data
         surname = form.surname.data
 
         flag = YandexLyceumStudent.query.filter_by(username=username).first()
 
+
         if (not flag and username not in ADMINS):
-            user = YandexLyceumStudent(username=username,
-                                       password=password,
-                                       email=email,
-                                       name=name,
-                                       surname=surname)
-            session['username'] = username
-            db.session.add(user)
-            db.session.commit()
-            return redirect("/")
+            if password == passwordtwo:
+                user = YandexLyceumStudent(username=username,
+                                           password=password,
+                                           passwordtwo=passwordtwo,
+                                           email=email,
+                                           name=name,
+                                           surname=surname)
+
+                session['username'] = username
+                db.session.add(user)
+                db.session.commit()
+                return redirect("/")
+
+            else:
+                return render_template('register.html', form=form, status=4)
         else:
             return render_template('register.html', form=form, status=3)
 

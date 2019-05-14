@@ -8,7 +8,7 @@
 <br/>
 <br/>
 <br/>
-    <center><h1> Список ваших решений пуст </h1></center>
+    <center><h1> Список ваших задач пуст </h1></center>
 
       {% else %}
     <div>
@@ -17,7 +17,7 @@
 
        <th>ID</th>
       <th>Задача</th>
-      <th>Решение</th>
+      <th>Описание</th>
       <th>Статус</th>
          <th></th>
 
@@ -25,14 +25,14 @@
       <tr>
           <th>{{id}}</th>
           <th>{{task_name}}</th>
-          <th> <a class="text-white" href="/code/{{id}}">url</a></th>
-                 {% if status == 'На проверке'%}
+          <th> <a class="text-white" href="/change_status/{{id}}">Подробнее</a></th>
+                 {% if status == 'Выполняется'%}
           <th> <a style="color:rgba(246, 238, 96, 1)">{{status}}</a></th>
           {% endif %}
-            {% if status == 'Зачтено'%}
+            {% if status == 'Выполнено'%}
           <th > <a style="color:rgba(51, 255, 51, 1)">{{status}}</a></th>
           {% endif %}
-            {% if status == 'Отклонено'%}
+            {% if status == 'Отложено'%}
           <th> <a style="color:rgba(255, 41, 44, 1)">{{status}}</a></th>
           {% endif %}
          <th> <a class="text-white" href="/delete_solution/{{id}}">Удалить</a></th>

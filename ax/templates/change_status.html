@@ -8,25 +8,37 @@
         {{ form.hidden_tag() }}
         <div>
             <h3><u>Название задачи:</u> {{task}}</h3>
-            <h6>Отправитель: {{username}}</h6>
         </div>
 
 
-        <h4><u>Код посылки:</u></h4>
-            <div style="border: 2px solid black;padding:20px;background-color: #f8f9fa;">
-                <code> <pre>{{code}} </pre></code>
+        <h4><u>Описание:</u></h4>
+            <div class="bg-dark text-white" style="border: 2px solid black;padding:20px;">
+                <code> <pre class="text-white">{{code}} </pre></code>
             </div>
 
             <br/>
-            <p>  <h4> <u>Поменять статус задачи на:</u> <h5> </h5> </h4>   {{ form.select }}
+
+            <p>
+                <h4> <u>Поменять статус задачи на:</u> <h5> </h5> </h4>
+                    {{ form.select(class="bg-dark text-white") }}
                     {% for error in form.select.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                    <h4> <u>Делегировать:</u> <h5> </h5> </h4>
+                    {{ form.people(class="bg-dark text-white") }}
+                    {% for error in form.people.errors %}
                         <div class="alert alert-danger" role="alert">
                             {{ error }}
                         </div>
                     {% endfor %}
             </p>
 
-    <p>{{ form.submit() }}</p>
+
+
+    <p>{{ form.submit(class="bg-dark text-white", style="border: 5px solid dimgray;") }}</p>
         </form>
     </div>
 {% endblock %}

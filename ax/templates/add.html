@@ -9,7 +9,7 @@
             {{ form.task_name.label }}
             <br>
 
-                {{ form.task_name(size='62', class='bg-dark text-white') }} <br>
+                {{ form.task_name(size='62', class='bg-dark text-white', style="border: 2px solid black;") }} <br>
 
             {% for error in form.task_name.errors %}
                 <div class="alert alert-danger" role="alert">
@@ -21,8 +21,28 @@
 
         <p>
             {{ form.code.label }}<br>
-        <pre>{{ form.code(cols="68", rows="25", class='bg-dark text-white') }}</pre><br>
+        <pre>{{ form.code(cols="68", rows="25", class='bg-dark text-white', style="border: 2px solid black;") }}</pre><br>
             {% for error in form.code.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.date.label }}<br>
+        <pre>{{ form.date(class='bg-dark text-white', style="border: 2px solid black;") }}</pre><br>
+            {% for error in form.date.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.aut_name.label }}<br>
+        <pre>{{ form.aut_name(cols="68", rows="25", class='bg-dark text-white', style="border: 2px solid black;") }}</pre><br>
+            {% for error in form.aut_name.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
