@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+	{% for item in news %}
+		<div class="alert alert-dark" role="alert">
+			<h2>{{item.task}}</h2>
+			<h3>{{item.student.username}}</h3>
+			<h3>{{item.status}}</h3>
+			<div>{{item.code}}</div>
+			<a href="/change_status/{{item.student_id}}/{{item.id}}/wa">Поставить статус WA</a>
+			<a href="/change_status/{{item.student_id}}/{{item.id}}/ok">Поставить статус OK</a>
+		</div>
+	{% endfor %}
+{% endblock %}
+
+

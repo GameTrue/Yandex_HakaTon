@@ -1,0 +1,31 @@
+﻿{% extends "base.html" %}
+ 
+{% block content %}
+    <h1 class="text-black">Авторизация</h1>
+
+{% if error != "" %}
+        <div class="alert alert-danger" role="alert">{{error}}</div> {% endif %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            <span class="text-black">{{ form.username.label }}</span><br>
+            <span class="bg-dark">{{ form.username }}</span><br>
+            {% for error in form.username.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            <span class="text-black">{{ form.password.label }}</span><br>
+            <span class="text-black">{{ form.password }}</span><br>
+            {% for error in form.password.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} <span class="text-black">{{ form.remember_me.label }}</span></p>
+       <p>{{ form.submit() }}</p> <a class="text-black" href="/register">Регистрация</a>
+    </form>
+{% endblock %}

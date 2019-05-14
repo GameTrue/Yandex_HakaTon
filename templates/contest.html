@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+	{% if admin == True %}
+		<a href="/users">Список пользователей</a>
+	{% endif %}
+	
+	<a href="/settings">Настройки сортировки</a>
+	
+	{% if admin == False %}
+		<a href="/add_news">Добавить новость</a>
+	{% endif %}
+	
+	{% for item in news %}
+		<div class="alert alert-dark" role="alert">
+			<h2><a href="/news/{{item[0]}}">{{item[1]}}</a></h2>
+			<div>{{item[2]}}</div>
+			<a href="/delete_news/{{item[0]}}">Удалить новость</a>
+		</div>
+	{% endfor %}
+{% endblock %}
+
+

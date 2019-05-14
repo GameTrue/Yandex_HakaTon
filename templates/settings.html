@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+    <h1>Настройки сортировки</h1></br>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.reverse.label }}<br>
+            {{ form.reverse }}<br>
+            {% for error in form.reverse.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+		</br>
+        <p>
+            
+            {{ form.sort_type }}<br>
+            {% for error in form.sort_type.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
+
+
